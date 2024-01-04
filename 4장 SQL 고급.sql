@@ -5,11 +5,11 @@
 #실습 4-1 ##직원 테이블
 create table `member` (
 	`uid`	varchar(10) primary key,
-    `name`	varchar(10),
-    `hp`	varchar(13),
-    `pos`	varchar(10)default '사원',
-    `dep`	int default NULL,
-    `rdate`	datetime
+    `name`	varchar(10) not null,
+    `hp`	char(13) unique not null,
+    `pos`	varchar(10) default '사원',
+    `dep`	tinyint,
+    `rdate`	datetime not null
     );
     select * from `member`;
 drop table `member`;
@@ -28,8 +28,8 @@ insert into `member` (`uid`,`name`,`hp`,`pos`,`dep`,`rdate`)values('a111','박�
 #실습 4-2 # 부서 테이블
 create table `Department`(
 	`depNo`	int primary key,
-    `name`	varchar(10),
-    `tel`	varchar(12)
+    `name`	varchar(10) not null,
+    `tel`	char(12) not null
     );
 select * from `department`;
 drop table `department`;
@@ -44,10 +44,10 @@ insert into `department` (`depNo`,`name`,`tel`)values(107,'인사부','051-512-1
 #실습 4-3 #매출 테이블
 create table `sales` (
 	`seq`	int primary key auto_increment,
-    `uid`	varchar(10),
-    `year`	year,
-    `month`	int,
-    `sale`	int
+    `uid`	varchar(10) not null,
+    `year`	year not null,
+    `month`	tinyint not null,
+    `sale`	int not null
     );
 drop table `sales`;
 select * from `sales`;
@@ -82,14 +82,69 @@ insert into `sales` (`uid`,`year`,`month`,`sale`)values('a104','2020',2,84000);
 insert into `sales` (`uid`,`year`,`month`,`sale`)values('a105','2020',2,180000);
 insert into `sales` (`uid`,`year`,`month`,`sale`)values('a108','2020',2,76000);
 
+#실습 4-3
+select * from `member` where `name`='김유신';
+select * from `member` where `pos`='차장' and dep=101;
+select * from `member` where `name` <> '김춘추';
+select * from `member` where `pos` in('사원', '대리');
+select * from `member` where `name` like '%신';
+select * from `member` where `name` like '정_';
+select * from `sales` where `sale` > 50000;
+select * from `sales` where `sale` >=50000 and `sale` <100000 and `month` = 1;
+select * from `sales` where `sale` between 50000 and 100000 and `month` = 1;
+select * from `sales` where `sale` not between 50000 and 100000;
+select * from `sales` where `year` in(2020);
+select * from `sales` where `month` in(1,2);
+
+
+#실습 4-4
+select * from `sales` order by `sale` asc;
+select * from `sales` order by `sale` desc;
+select * from `member` order by `name` asc;
+select * from `sales` where `sale` > 50000 order by `year`,`month`,`sale`desc;
+
+#실습 4-5
+select * from `sales` limit 3;
+select * from `sales` limit 0, 3;
+select * from `sales` limit 5, 3;
+select * from `sales`  order by `sale` desc limit 3,5;
+select * from `sales` where `sale` < 50000 order by `sale` desc limit 3;
+select * from sales where `sale` >50000 order by `year` desc, `month`, `sale` desc limit 5; 
+
+#실습 4-6
+select sum(`sale`) `합계` from `sales`;
+select avg(`sale`) as `평균` from `sales`;
+select ceiling(1.2);
+select ceiling(1.8);
+select floor(1.2);
+select floor(1.8);
+select rand();
+select ceil(rand()*10);
+select ceil(1.8);
+select round(1.2);
+select round(1.8);
+select count(sale) as `갯수` from `sales`;
+select count(*) as `갯수` from `sales`;
+select left('helloworld',5);
+select right('helloworld',5);
+select substring('helloworld',6,5);
+select concat('hello','world');
+select concat(`uid`,`name`,`hp`) from `member` where `uid` ='a108';
+select curdate();
+select curtime();
+select now();
+insert into `member` values ('a112','유관순','010-1234-1012','대리',107,now());
+
+#실습 4-7
 #실습 4-1
 #실습 4-1
-#실습 4-1
-#실습 4-1
-#실습 4-1
-#실습 4-1
-#실습 4-1
-#실습 4-1
+#실습 4-10
+
+select `uid`, count(*) as `건수` from `sales`  group by `uid`;
+select `uid`, sum(sale) as `합계` from `sales` group by `uid`;
+select `uid`, `year`, sum(`sale`) as `합계` from `sales` group by `uid`, `year`; 
+
+
 #실습 4-1
 #실습 4-1
 #실습 4-1
